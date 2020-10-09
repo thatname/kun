@@ -50,6 +50,6 @@ target_link_libraries(kun PUBLIC debug ${llvm_libs_debug})
 target_link_libraries(kun PUBLIC optimized ${llvm_libs_optimized})
 target_include_directories(kun PUBLIC ${LLVM_PROJECT}/llvm/include ${LLVM_BUILD}/include ${LLVM_PROJECT}/clang/include ${LLVM_BUILD}/tools/clang/include ${CMAKE_CURRENT_SOURCE_DIR}/cxx/include)
 target_include_directories(kun PUBLIC externals/cpp-peglib)
-
+set_property(TARGET kun PROPERTY CXX_STANDARD 17)
 
 

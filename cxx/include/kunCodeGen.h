@@ -1,0 +1,7 @@
+namespace kun
+{
+	struct CodeGen
+	{
+
+	};
+}
