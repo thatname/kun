@@ -1,14 +1,42 @@
+#include "llvm/ADT/PointerIntPair.h"
+#include <vector>
+#include <unordered_map>
 namespace kun
 {
 	struct Reflection
 	{
+		enum Qualifiers
+		{
+			Const,
+			Volatile,
+			Restrict,
+			Count,
+		};
+		struct PointerType;
+		struct StaticArrayType;
 		struct TypeBase
 		{
 			virtual ~TypeBase() {};
+
+			PointerType* GetPointerType() {}
+			StaticArrayType* GetStaticArrayType(int dimension, unsigned long long * arrayLength) {}
+		protected:
+			PointerType* pointerType = nullptr;
+
+		};
+		struct QualType
+		{
+			TypeBase* GetPointer(){}
+		protected:
+			llvm::PointerIntPair<TypeBase*, Count> value;
 		};
 		struct NamedType : TypeBase
 		{
-			std::string originalName;
+			std::string name;
+		};
+		struct TypeDef : NamedType
+		{
+			QualType target;
 		};
 		struct BasicType : NamedType
 		{
@@ -28,8 +56,17 @@ namespace kun
 			BasicType* elementType;
 			int vectorLength; 
 		};
-		std::unordered_map< int, IntType*> intTypes;
-		std::unordered_map<BasicType*, VectorType*> vectorTypes;
+		struct PointerType : public TypeBase 
+		{
+			TypeBase* pointeeType;
+		};
+		struct StaticArrayType : public TypeBase
+		{
+			TypeBase* elementType;
+			std::vector<unsigned long long>dimensions;
+		};
+		//std::unordered_map< int, IntType*> intTypes;
+		//std::unordered_map<BasicType*, VectorType*> vectorTypes;
 		std::unordered_map<std::string, TypeBase> namedTypes; // Including typedefs.
 	};
 }
